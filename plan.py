@@ -33,9 +33,13 @@ DEITY = {
     (8, 3): "九天司命灶君千秋", (8, 15): "月下老人、太陰星君聖誕", (8, 22): "廣澤尊王千秋", (8, 27): "至聖先師孔子聖誕",
     (9, 9): "中壇元帥（三太子）聖誕", (9, 13): "孟婆尊神千秋", (9, 15): "女媧娘娘萬壽、五府千歲吳三王聖誕",
     (9, 18): "倉聖先師千秋", (9, 19): "觀世音菩薩出家紀念日", (9, 28): "五顯大帝聖誕",
-    (10, 5): "達摩祖師聖誕", (10, 15): "下元水官大帝聖誕", (10, 18): "地母至尊千秋", (10, 22): "青山靈安尊王千秋",
+    (10, 2): "第七延天溪女娘娘聖誕", (10, 5): "達摩祖師聖誕", (10, 15): "下元水官大帝聖誕", (10, 18): "地母至尊千秋", (10, 22): "青山靈安尊王千秋",
     (11, 11): "太乙救苦天尊聖誕", (11, 17): "阿彌陀佛聖誕",
     (12, 8): "釋迦牟尼佛成道日", (12, 16): "福德正神千秋（尾牙）",
+}
+# 粉專主人提供的補充資料（排程發文時可直接採用）
+NOTES = {
+    (10, 2): "屬於「天遊六丁六甲十二延天溪女娘娘」中的第七位",
 }
 CN = "〇一二三四五六七八九十"
 
@@ -66,8 +70,11 @@ def plan(day):
     no = (day - START).days + 1
     name, ld = deity_of(day)
     if name:
-        return {"date": str(day), "no": no, "kind": "神明聖誕", "deity": name,
-                "lunar": lunar_cn(ld.month, ld.day)}
+        out = {"date": str(day), "no": no, "kind": "神明聖誕", "deity": name,
+               "lunar": lunar_cn(ld.month, ld.day)}
+        if (ld.month, ld.day) in NOTES:
+            out["note"] = NOTES[(ld.month, ld.day)]
+        return out
     k = sum(1 for i in range((day - START).days)
             if not deity_of(START + datetime.timedelta(days=i))[0])
     return {"date": str(day), "no": no, "kind": "廟口故事", "topic": TOPICS[k % len(TOPICS)],
